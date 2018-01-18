@@ -12,6 +12,7 @@ from uicontrollers.u_captcha_dialog import Ui_captcha
 from uicontrollers.captcha_dialog import CaptchaDialog
 import re
 from business.middleproxy import MiddleProxy
+from business.checkcaptchathread import CheckCaptchaThread
 
 
 class LoginWidget(QMainWindow):
@@ -109,7 +110,24 @@ class LoginWidget(QMainWindow):
         :param absPoint: 验证码Dialog回传的坐标
         :return:
         """
-        QMessageBox.about(self, '提示信息', '\n' + absPoint)
+        self.checkLogin(absPoint)
+
+    def checkLogin(self,absPoint):
+        checkCaptchaThread = CheckCaptchaThread(self, absPoint)
+        checkCaptchaThread.captchaFalure.connect(self.checkCaptchaFail)
+        checkCaptchaThread.loginFalure.connect(self.loginFail)
+        checkCaptchaThread.loginSucess.connect(self.loginSucess)
+        checkCaptchaThread.start()
+
+
+    def checkCaptchaFail(self,msg):
+        QMessageBox.about(self, '提示信息', '\n' + msg)
+
+    def loginFail(self,msg):
+        QMessageBox.about(self, '提示信息', '\n' + msg)
+
+    def loginSucess(self,msg):
+        QMessageBox.about(self, '提示信息', '\n' + msg)
 
     #check监听
     def checkChanged(self,state):

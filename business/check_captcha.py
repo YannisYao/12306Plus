@@ -28,7 +28,7 @@ def get_result_points(ret,result):
         print('打码故障！ 错误代码：%s' % ret)
         return None
 
-def check_captcha_request(url,param):
+def check_captcha_request(param,url=UrlContants.CAPTCHA_CHECK):
 
     params={'answer':param,
             'login_site':'E',
@@ -53,7 +53,7 @@ def check_captcha():
         result_points = get_result_points(ret,result)
         print('打码兔坐标转换--->'+result_points)
         #发起验证码验证
-        check_result = check_captcha_request(UrlContants.CAPTCHA_CHECK,result_points)
+        check_result = check_captcha_request(result_points)
         if check_result['result_code'] == '4':
             #此处后续可以进行数据库存储，因12306验证码图片不是动态生成的，可以存储对应的答案，减少对打码平台的依赖
             return True
