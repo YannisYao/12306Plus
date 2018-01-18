@@ -1,0 +1,9 @@
+QPushButton#refresh
+{
+border:none
+}
+
+QPushButton#refresh:hover{
+border:1px
+border-color:black
+}

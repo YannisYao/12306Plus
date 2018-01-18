@@ -1,0 +1,13 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+<file alias="images/captcha.jpg">resources/images/captcha.jpg</file>
+<file alias="images/login.png">resources/images/login.png</file>
+<file alias="images/logo.png">resources/images/logo.png</file>
+<file alias="images/refresh.png">resources/images/refresh.png</file>
+<file alias="images/selected.png">resources/images/selected.png</file>
+<file alias="images/ticket_489px_1190296_easyicon.net.png">resources/images/ticket_489px_1190296_easyicon.net.png</file>
+<file alias="qss/captchadialog.qss">resources/qss/captchadialog.qss</file>
+<file alias="qss/loginwindow.qss">resources/qss/loginwindow.qss</file>
+</qresource>
+</RCC>
