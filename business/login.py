@@ -12,18 +12,26 @@ def check_login(url=UrlContants.LOGIN_URL):
               'password': MiddleProxy.get12306Pwd(),
               'appid': 'otn'}
     s = MiddleProxy.getSession().post(url,params=params,headers=MiddleProxy.headers_xhr)
-    if s.status_code == 200 and s.content is not None:
-        content = str(s.content,encoding='utf-8')
+
+    if s.status_code == 200 and s.headers['Content-Type'] == 'application/json;charset=UTF-8':
+        content = str(s.content, encoding='utf-8')
         jres = json.loads(content)
-        print(jres)
-        return jres
+        if jres['result_code'] == 0:
+            return (True,jres['result_message'],jres['result_code'])
+        else:
+            return (False,jres['result_message'],jres['result_code'])
+    elif s.status_code == 200 and s.headers['Content-Type'] == 'text/html':
+        bsObj = BeautifulSoup(s.content,'html.parser')
+        err_msg = bsObj.find('div', {'class': 'err_text'}).find('li', {'id': 'err_bot'}).get_text().strip()
+        err_msg = err_msg[:err_msg.index('！')+2]
+        return (False,err_msg,-1)
 
 def uamtk_request():
     uamtk_params = {
         'appid':'otn'
     }
     s = MiddleProxy.getSession().post(UrlContants.UAMTK_REQUEST,headers=MiddleProxy.headers_xhr,params=uamtk_params)
-    if s.status_code == 200 :
+    if s.status_code == 200 and s.headers['Content-Type'] == 'application/json;charset=UTF-8':
         content = str(s.content,encoding='utf-8')
         jres1 = json.loads(content)
         print(jres1)
@@ -33,13 +41,33 @@ def uamtk_request():
                 "tk":newapptk
             }
             ss = MiddleProxy.getSession().post(UrlContants.UAMTK_AUTH_CLIENT,headers=MiddleProxy.headers_xhr,params=uamtk_auth_params)
-            if ss.status_code == 200:
+            if ss.status_code == 200 and ss.headers['Content-Type'] == 'application/json;charset=UTF-8':
                 jres2 = json.loads(str(ss.content,encoding='utf-8'))
                 print(jres2)
                 if jres2['result_code'] == 0:
                     print('验证通过！')
-                    return True #后续可以从首页开始爬虫
+                    return jres2['username']#后续可以从首页开始爬虫
+    return None
+
+def uamtk_auth():
+    uamtk_params = {
+        'appid': 'otn'
+    }
+    s = MiddleProxy.getSession().post(UrlContants.UAMTK_REQUEST, headers=MiddleProxy.headers_xhr, params=uamtk_params)
+
+    if s.status_code == 200:
+        content = str(s.content, encoding='utf-8')
+        jres1 = json.loads(content)
+        print(jres1)
+        if jres1['result_code'] == 0:
+            newapptk = jres1['newapptk']
+            uamtk_auth_params = {
+                "tk": newapptk
+            }
+            return True  # 后续可以从首页开始爬虫
     return False
+
+
 
 def query_userinfo(url=UrlContants.QUERY_USERINFO):
     params = {'_json_att':''}
@@ -71,3 +99,9 @@ def login():
     print('准备重新登录！')
     MiddleProxy.clearSession()
     login()
+
+if __name__ == '__main__':
+    MiddleProxy.set12306User("yaolianghbut")
+    MiddleProxy.set12306Pwd("yaoliang123")
+    a,b,c = check_login()
+    print(b)

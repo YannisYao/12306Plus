@@ -13,6 +13,9 @@ import uicontrollers.resources
 
 
 class PaintQLabel(QLabel):
+    # 坐标偏移量
+    OFFSET_X = 0
+    OFFSET_Y = 30
 
     def __init__(self,parent=None):
         """
@@ -110,7 +113,7 @@ class PaintQLabel(QLabel):
             return None
         else:
             for point in self.points:
-                abs = abs + str(point.x())+','+ str(point.y())+','
+                abs = abs + str(point.x()-self.OFFSET_X)+','+ str(point.y()-self.OFFSET_Y)+','
             return abs.rstrip(',')
 
 

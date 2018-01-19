@@ -4,6 +4,7 @@ from business.captcha_download import download_captcha
 import json
 from business.urlcontants import UrlContants
 from business.middleproxy import MiddleProxy
+from bs4 import BeautifulSoup
 
 #坐标识别式验证码
 CAPTCHA_TYPE = 310
@@ -34,11 +35,19 @@ def check_captcha_request(param,url=UrlContants.CAPTCHA_CHECK):
             'login_site':'E',
             'rand':'sjrand'}
     s = MiddleProxy.getSession().post(url, params=params,headers=MiddleProxy.headers_xhr)
-    if s.status_code == 200 and s.content is not None:
-        content = str(s.content,encoding='utf-8')
+
+    if s.status_code == 200 and s.headers['Content-Type'] == 'application/json;charset=UTF-8':
+        content = str(s.content, encoding='utf-8')
         jres = json.loads(content)
-        print(jres)
-        return jres
+        if jres['result_code'] == '4':
+            return (True,jres['result_message'])
+        else:
+            return (False,jres['result_message'])
+    elif s.status_code == 200 and s.headers['Content-Type'] == 'text/html':
+        bsObj = BeautifulSoup(s.content,'html.parser')
+        err_msg = bsObj.find('div', {'class': 'err_text'}).find('li', {'id': 'err_bot'}).get_text().strip()
+        err_msg = err_msg[:err_msg.index('！')+2]
+        return (False,err_msg)
 
 def check_captcha():
     #存储验证码图片

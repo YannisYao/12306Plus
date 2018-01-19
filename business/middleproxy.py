@@ -11,18 +11,19 @@ class MiddleProxy(object):
 
     headers_image = {'Host': 'kyfw.12306.cn', 'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
                'Accept-Language': 'zh-CN,zh;q=0.9',
-               'Accept - Encoding': 'gzip, deflate, br',
+               'Accept-Encoding': 'gzip, deflate, br',
                'User-Agent': _ua.random}
     headers_xhr = {'Host': 'kyfw.12306.cn', 'Accept': 'application/json, text/javascript, */*; q=0.01',
-               'Accept-Language': 'zh-CN,zh;q=0.9',
-               'Accept - Encoding': 'gzip, deflate, br',
-               'Content - Type': 'application / x - www - form - urlencoded;charset = UTF - 8',
-               'X - Requested - With': 'XMLHttpRequest',
+               'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+               'Accept-Encoding': 'gzip, deflate, br',
+               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+               'Referer':'https://kyfw.12306.cn/otn/login/init',
+               'X-Requested-With': 'XMLHttpRequest',
                'User-Agent': _ua.random}
     headers_doc = {'Host': 'kyfw.12306.cn', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                'Accept-Language': 'zh-CN,zh;q=0.9',
-               'Accept - Encoding': 'gzip, deflate, br',
-               'Content - Type': 'application / x - www - form - urlencoded;charset = UTF - 8',
+               'Accept-Encoding': 'gzip,deflate,br',
+               'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
                'User-Agent': _ua.random}
 
     #单例session，方便管理

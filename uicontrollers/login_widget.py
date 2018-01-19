@@ -121,10 +121,17 @@ class LoginWidget(QMainWindow):
 
 
     def checkCaptchaFail(self,msg):
-        QMessageBox.about(self, '提示信息', '\n' + msg)
+        self.setToolTip(msg)
+        self.requestCaptcha()
 
     def loginFail(self,msg):
-        QMessageBox.about(self, '提示信息', '\n' + msg)
+        res = msg.split("|")
+        if int(res[0]) < 0:
+            self.setToolTip(res[1])
+            self.requestCaptcha()
+        else:
+            self.exitLogin()
+            QMessageBox.about(self, '提示信息', '\n' + res[1])
 
     def loginSucess(self,msg):
         QMessageBox.about(self, '提示信息', '\n' + msg)

@@ -3,7 +3,7 @@ class UrlContants(object):
     # 首先获取图片，然后给图片进行md5摘要取名
     CAPTCHA_URL = 'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&0.5537893176239919'
     # 验证码校验接口
-    CAPTCHA_CHECK = 'https://kyfw.12306.cn/passport/business/business-check'
+    CAPTCHA_CHECK = 'https://kyfw.12306.cn/passport/captcha/captcha-check'
 
     # 12306 登陆接口
     LOGIN_URL = 'https://kyfw.12306.cn/passport/web/login'

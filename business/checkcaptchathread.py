@@ -13,17 +13,20 @@ class CheckCaptchaThread(QThread):
         self.result_points =result_points
 
     def run(self):
-        check_result = check_captcha_request(self.result_points)
-        if check_result['result_code'] == '4':
-            login_result = check_login()
-            if login_result['result_code'] == 0:
-                uamtk_request()
-                self.loginSucess.emit("登陆成功！")
+        check_result,msg = check_captcha_request(self.result_points)
+        if check_result:
+            login_result,msg1,flag= check_login()
+            if login_result:
+                username = None
+                while(username is None):
+                    username = uamtk_request()
+
+                self.loginSucess.emit(username)
             else:
-                self.loginFalure.emit("登陆失败！")
+                self.loginFalure.emit(str(flag)+"|"+msg1)
 
         else:
-            self.captchaFalure.emit("校验验证码失败！")
+            self.captchaFalure.emit(msg)
 
 
 
